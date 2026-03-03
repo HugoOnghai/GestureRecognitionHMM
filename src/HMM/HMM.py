@@ -52,7 +52,7 @@ class HMM():
         # t = 0
         # [1 by N] = [N] * [N by 1]
         alpha[0,:] = self.pi[:]*self.B[:,seq[0]] # calculate alpha_i(0) for every i in 0 to N-1.
-        c[0] = 1.0 / (alpha[0,:].sum()) # calculate scaling coefficient c_0.
+        c[0] = 1.0 / (alpha[0,:].sum() + 1e-12) # calculate scaling coefficient c_0.
         alpha_hat[0, :] = c[0]*alpha[0,:] # like a geometric series, we keep applying scaling coefficients
 
         # t > 0
@@ -60,7 +60,7 @@ class HMM():
             # [1 by N] = [1 by N]*[N by N] * [N by 1] *
             pred = alpha_hat[t-1,:] @ self.A[:, :] # the probability of getting all the way to state i at t-1, then transition from i to j. 
             alpha[t,:] = pred * self.B[:,seq[t]]
-            c[t] = 1.0 / (alpha[t, :].sum())
+            c[t] = 1.0 / (alpha[t, :].sum() + 1e-12) # added epsilon to avoid divide by zero/underflow error
             alpha_hat[t,:] = c[t]*alpha[t,:]
 
         return alpha_hat, c

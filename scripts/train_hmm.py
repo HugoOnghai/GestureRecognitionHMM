@@ -14,6 +14,7 @@ from src.gesture import Gesture
 from src.load_seqs_by_label import load_seqs_by_label
 
 PROCESSED_TRAIN_DIR = project_root / "data" / "processed_train"
+PROCESSED_VAL_DIR = project_root / "data" / "processed_val"
 MODELS_DIR = project_root / "models"
 TRAINING_LOG_PATH = project_root / "outputs" / "training_logs" / "HMMs.txt"
 
@@ -34,6 +35,8 @@ def models_exist() -> bool:
 
 def load_models() -> dict:
     """Load all HMM .npz files from ./models/ and return a dict {label: HMM}."""
+    if not models_exist():
+        raise FileNotFoundError("No models found in ./models/. First run train_hmm.py to train models.")
     models = {}
     for p in sorted(MODELS_DIR.glob("*_HMM.npz")):
         hmm = HMM.load(p)

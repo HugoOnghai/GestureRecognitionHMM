@@ -29,3 +29,7 @@ uv run ./scripts/evaluate_hmm.py
 ```
 
 This command should run `evaluate_hmm.py` in the UV virtual environment that will be built from `uv.lock`. It should load each of the HMMs, and then predict the labels of each sequence in the directory given, currently the processed training set.
+
+# Debug/Testing:
+
+Improved from last time, I implemented a validation set. This can be easily generated with `partition_preprocess.py`. Then, to train the models on the training set and evaluate them on the validation set, run `train_hmm.py` and `evaluate_hmm.py` respectively. If you want to reset everything and try a new partition, run `reset_models.py`. This script resets everything by deleting the contents of `/models/`, deleting all pre-processing (`/data/processed_train` and `/data/processed_val`), and deleting all logs (`/outputs/training_logs`).
