@@ -13,6 +13,7 @@ def main():
     model_num_correct = 0
     model_num_total = 0
 
+    # this will eventually change when we have the test set!
     processed_train_dir = Path("data/processed_train/")
     seqs_by_label = load_seqs_by_label(processed_train_dir)
 
