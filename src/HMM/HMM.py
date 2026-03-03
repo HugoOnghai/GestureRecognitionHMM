@@ -36,7 +36,11 @@ class HMM():
 
         self.pi = pi
         self.A = A # A[i, j] = a_ij = P(X_t = j | X_t-1 = i), time-indep stochastic transition matrix
-        self.B = B # B[i, j] = b_j(y_i) = P(Y_t = y_i | X_t = j), j in all possible states, i in all possible observations
+        self.B = B # B[j, i] = b_j(y_i) = P(Y_t = y_i | X_t = j), j in all possible states, i in all possible observations
+
+        assert np.allclose(self.pi.sum(), 1.0), "pi must sum to 1"
+        assert np.allclose(self.A.sum(axis=1), 1.0), "A must sum to 1"
+        assert np.allclose(self.B.sum(axis=1), 1.0), "B must sum to 1"
 
     def construct_forward(self, seq: np.ndarray):
         T = len(seq)
@@ -85,6 +89,9 @@ class HMM():
         numer = alpha_hat * beta_hat # (T,N) element wise operation gives us alpha_i(t) * beta_i(t)
         denom = numer.sum(axis=1, keepdims=True) # (T,1) sum across each row (over states)
         gamma = numer / denom
+
+        assert np.allclose(gamma.sum(axis=1), 1.0), "gamma must sum to 1"
+
         return gamma # (T,N)
 
     def calculate_xi(self, seq: np.ndarray, alpha_hat, beta_hat):
@@ -97,7 +104,7 @@ class HMM():
             bj = beta_hat[t+1,:]*self.B[:,seq[t+1]]
 
             # prob of being in i from the forwards
-            ai = alpha_hat[t,:]*self.A[:,:]
+            ai = alpha_hat[t,:][:, None]*self.A[:,:] # (N,1) * (N,N) = (N,N)
 
             numer = ai*bj
 
@@ -106,6 +113,8 @@ class HMM():
 
             xi[t,:,:] = numer / denom
 
+        assert np.allclose(xi.sum(axis=(1,2)), 1.0), "xi must sum to 1"
+
         return xi
     
     def update_params(self, seq, gamma, xi): # updating params based on a single input
@@ -113,8 +122,9 @@ class HMM():
         self.pi = gamma[0].copy()
 
         # A
-        self.A = xi.sum(axis=0, keepdims=True) / gamma[:-1, :].sum(axis=0, keepdims=True)
-        
+        self.A = xi.sum(axis=0) / gamma[:-1, :].sum(axis=0)
+        # (N, N) / (N,) -> broadcasted to (N,N) = A.shape
+
         # B
         Y = np.eye(self.M)[seq]
         B_numer = gamma.T @ Y
@@ -142,6 +152,8 @@ class HMM():
 
             # log P(seq|model)
             total_loglikelihood += -np.sum(np.log(c + 1e-12))
+            # log-likelihood is log P(observation seq | model) = - sum (log(c_t)) for t in 0 to T-1
+            # which is P(observation seq | model) = sum_{i=1}^{N}{alpha_T(i)} source: https://web.stanford.edu/~jurafsky/slp3/A.pdf
 
             # accumulate updates
             pi += gamma[0] # (1,N)
@@ -158,11 +170,40 @@ class HMM():
         self.A = A_numer / A_denom[:, None] # fixes broadcasting issues
         self.B = B_numer / B_denom[:, None] # fixes broadcasting issues
 
-        return total_loglikelihood
+        termination_prob = (1/c[-1])
+
+        return total_loglikelihood, termination_prob
     
     def score(self, seqs, eps=1e-12):
         total = 0.0
+        if isinstance(seqs, np.ndarray):
+            seqs = [seqs] # this allows us to pass a single sequence too
         for seq in seqs:
             _, c = self.construct_forward(seq)
             total += -np.sum(np.log(c + eps))
-        return total
+            termination_prob = (1/c[-1])
+        return total, termination_prob
+
+    def save(self, path):
+        # Save the HMM parameters to a .npz file
+        np.savez(
+            path,
+            pi=self.pi,
+            A=self.A,
+            B=self.B,
+            N=np.array([self.N]),
+            M=np.array([self.M]),
+            label=np.array([self.label]),
+        )
+
+    @classmethod
+    def load(cls, path):
+        # Load an HMM from a .npz file and return a fully initialized instance
+        data = np.load(path, allow_pickle=False)
+        N = int(data["N"][0])
+        M = int(data["M"][0])
+        label = int(data["label"][0])
+        pi = data["pi"]
+        A = data["A"]
+        B = data["B"]
+        return cls(N=N, M=M, pi=pi, A=A, B=B, label=label)

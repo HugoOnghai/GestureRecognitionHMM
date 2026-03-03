@@ -1,0 +1,66 @@
+Now training HMM for 4
+Epoch 0 complete. Log-likelihood = -61917.526315231866, Final P(seq|model) = 0.00936704134348203.
+Epoch 1 complete. Log-likelihood = -36757.35601879873, Final P(seq|model) = 0.25149807992398443.
+Epoch 2 complete. Log-likelihood = -35515.96692230426, Final P(seq|model) = 0.2808453213035054.
+Epoch 3 complete. Log-likelihood = -31676.592121005255, Final P(seq|model) = 0.4099489484566752.
+Epoch 4 complete. Log-likelihood = -25592.42623244527, Final P(seq|model) = 0.6296552892200299.
+Epoch 5 complete. Log-likelihood = -20511.36262967494, Final P(seq|model) = 0.7897882140011693.
+Epoch 6 complete. Log-likelihood = -18233.77769987471, Final P(seq|model) = 0.8148295455245766.
+Epoch 7 complete. Log-likelihood = -16887.877197169768, Final P(seq|model) = 0.8171169991807805.
+Epoch 8 complete. Log-likelihood = -16591.421045531275, Final P(seq|model) = 0.8188042948412404.
+Epoch 9 complete. Log-likelihood = -15498.321002595207, Final P(seq|model) = 0.8241660821512593.
+Now training HMM for 5
+Epoch 0 complete. Log-likelihood = -64977.87236329696, Final P(seq|model) = 0.00936704134348203.
+Epoch 1 complete. Log-likelihood = -41903.53442484161, Final P(seq|model) = 0.08750099074192096.
+Epoch 2 complete. Log-likelihood = -41034.899278344055, Final P(seq|model) = 0.09478661728256653.
+Epoch 3 complete. Log-likelihood = -38163.80908805281, Final P(seq|model) = 0.1304639251339966.
+Epoch 4 complete. Log-likelihood = -31397.557817735884, Final P(seq|model) = 0.22130413983018615.
+Epoch 5 complete. Log-likelihood = -26360.37067635286, Final P(seq|model) = 0.2719410536384282.
+Epoch 6 complete. Log-likelihood = -24375.91630973196, Final P(seq|model) = 0.30461294074674017.
+Epoch 7 complete. Log-likelihood = -22943.22143755282, Final P(seq|model) = 0.38728507500825066.
+Epoch 8 complete. Log-likelihood = -21442.19512392472, Final P(seq|model) = 0.6067747976244866.
+Epoch 9 complete. Log-likelihood = -19598.368784262388, Final P(seq|model) = 0.9039299181660636.
+Now training HMM for 3
+Epoch 0 complete. Log-likelihood = -49044.68139010745, Final P(seq|model) = 0.010040785045107222.
+Epoch 1 complete. Log-likelihood = -29784.995538217518, Final P(seq|model) = 0.19161132934892755.
+Epoch 2 complete. Log-likelihood = -28473.664043070185, Final P(seq|model) = 0.2134751762125539.
+Epoch 3 complete. Log-likelihood = -25123.07404441236, Final P(seq|model) = 0.27166708412909274.
+Epoch 4 complete. Log-likelihood = -19662.779316508215, Final P(seq|model) = 0.36725850846759095.
+Epoch 5 complete. Log-likelihood = -16056.098114981804, Final P(seq|model) = 0.5097907947913556.
+Epoch 6 complete. Log-likelihood = -14419.979256878643, Final P(seq|model) = 0.5694152600479999.
+Epoch 7 complete. Log-likelihood = -13295.908596552048, Final P(seq|model) = 0.575977806838516.
+Epoch 8 complete. Log-likelihood = -12340.205159270306, Final P(seq|model) = 0.5825420666398586.
+Epoch 9 complete. Log-likelihood = -11658.835688231375, Final P(seq|model) = 0.6283442262666326.
+Now training HMM for 2
+Epoch 0 complete. Log-likelihood = -65243.7780860281, Final P(seq|model) = 0.012906304680486858.
+Epoch 1 complete. Log-likelihood = -44200.74893532741, Final P(seq|model) = 0.044297467870759916.
+Epoch 2 complete. Log-likelihood = -42516.30961075022, Final P(seq|model) = 0.04714506418636881.
+Epoch 3 complete. Log-likelihood = -37922.67210762254, Final P(seq|model) = 0.059783470203326285.
+Epoch 4 complete. Log-likelihood = -32179.52354288051, Final P(seq|model) = 0.0875129332380486.
+Epoch 5 complete. Log-likelihood = -28744.909513671908, Final P(seq|model) = 0.11573137032293913.
+Epoch 6 complete. Log-likelihood = -26282.525256703666, Final P(seq|model) = 0.15339697899123275.
+Epoch 7 complete. Log-likelihood = -24639.50919679766, Final P(seq|model) = 0.1870914060523253.
+Epoch 8 complete. Log-likelihood = -23148.305935178912, Final P(seq|model) = 0.2600427594217794.
+Epoch 9 complete. Log-likelihood = -21594.08485873569, Final P(seq|model) = 0.3410205857924188.
+Now training HMM for 1
+Epoch 0 complete. Log-likelihood = -56899.18916261569, Final P(seq|model) = 0.012906304680486858.
+Epoch 1 complete. Log-likelihood = -37831.021576302956, Final P(seq|model) = 0.08646373474168424.
+Epoch 2 complete. Log-likelihood = -36555.90412910025, Final P(seq|model) = 0.095373902543312.
+Epoch 3 complete. Log-likelihood = -32509.198622940774, Final P(seq|model) = 0.13182726235280395.
+Epoch 4 complete. Log-likelihood = -25904.35305141125, Final P(seq|model) = 0.24173694207418578.
+Epoch 5 complete. Log-likelihood = -20549.220712290797, Final P(seq|model) = 0.5353399630885914.
+Epoch 6 complete. Log-likelihood = -18166.505640599295, Final P(seq|model) = 0.5979050242997135.
+Epoch 7 complete. Log-likelihood = -17845.930542433303, Final P(seq|model) = 0.599848970641818.
+Epoch 8 complete. Log-likelihood = -17799.737197619408, Final P(seq|model) = 0.6064449838981094.
+Epoch 9 complete. Log-likelihood = -17541.398134113584, Final P(seq|model) = 0.6162589452726673.
+Now training HMM for 0
+Epoch 0 complete. Log-likelihood = -67567.41892845824, Final P(seq|model) = 0.010267087893927374.
+Epoch 1 complete. Log-likelihood = -39524.713598556045, Final P(seq|model) = 0.1519685333616427.
+Epoch 2 complete. Log-likelihood = -38210.8826998201, Final P(seq|model) = 0.15757839147589617.
+Epoch 3 complete. Log-likelihood = -33939.87383857123, Final P(seq|model) = 0.18193961040580198.
+Epoch 4 complete. Log-likelihood = -26425.878796638033, Final P(seq|model) = 0.31071914115512983.
+Epoch 5 complete. Log-likelihood = -20755.285087484765, Final P(seq|model) = 0.4798481048979029.
+Epoch 6 complete. Log-likelihood = -16773.223278174057, Final P(seq|model) = 0.8503874407299873.
+Epoch 7 complete. Log-likelihood = -14759.713865600268, Final P(seq|model) = 0.9919169820198244.
+Epoch 8 complete. Log-likelihood = -13899.068054098445, Final P(seq|model) = 0.9981502891006167.
+Epoch 9 complete. Log-likelihood = -13809.234146705212, Final P(seq|model) = 0.9981515707611764.
