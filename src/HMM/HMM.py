@@ -131,7 +131,7 @@ class HMM():
         B_denom = gamma.sum(axis=0, keepdims=True).T
         self.B = B_numer / (B_denom + 1e-6)
 
-    def fit_once(self, seqs): # the whole shebang, source: wikipedia
+    def fit_once(self, seqs, eps=1e-9): # the whole shebang, source: wikipedia
         # instead of using update_params, I need to sum the numerators and denominators up first, across what was found from each sequences
         pi = np.zeros(self.N)
         A_numer = np.zeros((self.N, self.N))
@@ -151,7 +151,7 @@ class HMM():
             xi = self.calculate_xi(seq, alpha_hat, beta_hat)
 
             # log P(seq|model)
-            total_loglikelihood += -np.sum(np.log(c + 1e-12))
+            total_loglikelihood += -np.sum(np.log(np.clip(c, eps, None)))
             # log-likelihood is log P(observation seq | model) = - sum (log(c_t)) for t in 0 to T-1
             # which is P(observation seq | model) = sum_{i=1}^{N}{alpha_T(i)} source: https://web.stanford.edu/~jurafsky/slp3/A.pdf
 

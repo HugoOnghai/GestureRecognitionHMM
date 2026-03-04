@@ -56,8 +56,15 @@ def train_and_save_models() -> dict:
     loglikelihoods = {}
     log_lines = []
 
+    A = 0.5*np.eye(NUM_STATES)
+    for i in range(NUM_STATES):
+        if i == NUM_STATES - 1:
+            A[i, 0] = 0.5
+        else:
+            A[i, i+1] = 0.5
+
     for label, seqs in seqs_by_label.items():
-        hmm = HMM(N=NUM_STATES, M=NUM_CLUSTERS, init="random", label=label)
+        hmm = HMM(N=NUM_STATES, M=NUM_CLUSTERS, A=A, init="random", label=label)
         ll_list = []
 
         msg = f"Now training HMM for {label}"
