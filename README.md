@@ -7,10 +7,11 @@ In this project, I implemented six hidden markov models (HMMs) to each recognize
 
 # Code Structure
 
-You can call ls -T1 to recreate this diagram. The project is broken down into several sections, each of which is described here.
+You can call `ls -T1` to recreate this diagram. The project is broken down into several sections, each of which is described here.
 
 -  data # NOT PUSHED TO REMOTE REPOSITORY. It contains raw data and processed data (after Kalman Filtering)
 -  models # TRAINED MODELS STORED HERE. Created/Loaded in `train_hmm.py` and `evaluate_hmm.py`
+-  models # MODELS TRAINED ON FULL TRAINING SET. aka 0 weight fraction validation set
 -  outputs # FIGURES + LOGS. Loglikelihood graph and 1D Kalman filter example.
 -  scripts # RUN `evaluate_hmm.py`. This is where everything is put together, where predictions and accuracy (across all 6 HMMs treated as 1 model) are calcualted.
 - 󰣞 src # KALMAN FILTER + HMM IMPLEMENTATION. Unlike last project, I organized all my code better as python modules.

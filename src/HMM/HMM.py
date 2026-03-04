@@ -168,19 +168,19 @@ class HMM():
         # normalize (also M-step)
         self.pi = pi / len(seqs)
         self.A = A_numer / A_denom[:, None] # fixes broadcasting issues
-        self.B = B_numer / B_denom[:, None] # fixes broadcasting issues
+        self.B = B_numer / B_denom[:, None] + np.random.uniform(-1e-9, 1e-9) # fixes broadcasting issues and avoid 0 probability emissions and issues of all equal probabilities.
 
         termination_prob = (1/c[-1])
 
         return total_loglikelihood, termination_prob
     
-    def score(self, seqs, eps=1e-12):
+    def score(self, seqs, eps=1e-9):
         total = 0.0
         if isinstance(seqs, np.ndarray):
             seqs = [seqs] # this allows us to pass a single sequence too
         for seq in seqs:
             _, c = self.construct_forward(seq)
-            total += -np.sum(np.log(c + eps))
+            total += -np.sum(np.log(np.clip(c, eps, None)))
             termination_prob = (1/c[-1])
         return total, termination_prob
 

@@ -78,7 +78,7 @@ def train_and_save_models() -> dict:
         # save model
         out = model_path_for_label(label)
         hmm.save(out)
-        print(f"  → Saved to {out.name}")
+        print(f" --> Saved to {out.name}")
 
     # write training log
     TRAINING_LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
