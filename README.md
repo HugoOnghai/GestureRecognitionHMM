@@ -9,7 +9,7 @@ In this project, I implemented six hidden markov models (HMMs) to each recognize
 
 You can call `ls -T1` to recreate this diagram. The project is broken down into several sections, each of which is described here.
 
--  data # NOT PUSHED TO REMOTE REPOSITORY. It contains raw data and processed data (after Kalman Filtering)
+-  data # PROCESSED DATA PUSHED TO REMOTE REPOSITORY. It contains processed data (after Kalman Filtering and K-Means discretization)
 -  models # TRAINED MODELS STORED HERE. Created/Loaded in `train_hmm.py` and `evaluate_hmm.py`
 -  models # MODELS TRAINED ON FULL TRAINING SET. aka 0 weight fraction validation set
 -  outputs # FIGURES + LOGS. Loglikelihood graph and 1D Kalman filter example.
