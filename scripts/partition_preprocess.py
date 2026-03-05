@@ -8,8 +8,10 @@ import numpy as np
 from config import (
     RAW_TRAIN_DIR,
     RAW_VAL_DIR,
+    RAW_TEST_DIR,
     PROCESSED_TRAIN_DIR,
     PROCESSED_VAL_DIR,
+    PROCESSED_TEST_DIR,
     MODELS_DIR,
     TRAINING_LOG_PATH,
     TRAIN_VAL_SPLIT
@@ -159,6 +161,70 @@ else:
         O = kmeans.predict(X_scaled) # observations
 
         out_path = processed_val_dir / f"{record["id"]}.npz"
+        np.savez(
+            out_path,
+            O = O,
+            gesture = record["gesture"],
+            ts = record["ts"],
+            id = record["id"],
+            num_clusters = num_clusters # store the number of clusters
+        )
+
+### TEST SET
+
+### TEST SET TRANSFORM
+if not any(RAW_TEST_DIR.iterdir()):
+    print("No samples allocated to the test set, skipping test set preprocessing!")
+else:
+    col_names = ["ts", "Wx", "Wy", "Wz", "Ax", "Ay", "Az"]
+    sensor_cols = ["Wx", "Wy", "Wz", "Ax", "Ay", "Az"]
+
+    X_chunks = []
+    records = []
+
+    for txt_path in RAW_TEST_DIR.glob("*.txt"):
+        # import raw training data
+        raw_gesture = pd.read_csv(txt_path, header=None, sep=r"\s+", engine="python") # used regex to separate cols by any whitespace
+        raw_gesture.columns = col_names
+
+        # get gesture type
+        gesture_type = None
+
+        # apply 1D kalman filter to each column of IMU data
+        ts = raw_gesture["ts"].to_numpy()
+        fil_gesture = pd.DataFrame({"ts": ts})
+        for col in sensor_cols:
+            fil_gesture[col] = kalman_filter(raw_gesture[col].to_numpy(dtype="float64"))
+
+        X = fil_gesture[sensor_cols].to_numpy(dtype=np.float32)
+        X_chunks.append(X)
+
+        # make record for final formatting later
+        records.append(
+            {
+                "id": txt_path.stem,
+                "gesture": gesture_type,
+                "ts": ts,
+                "X": X  
+            }
+        )
+
+    X_test = np.vstack(X_chunks) # merge all "per file" data points to one large numpy array
+
+    # scale all sensor data (DONT FIT TEST DATA)
+    X_test_scaled = scaler.transform(X_test)
+
+    # kmeans, don't fit just transform
+    # format all processed data ready for HMM
+    processed_test_dir = PROCESSED_TEST_DIR
+    processed_test_dir.mkdir(parents=True, exist_ok=True)
+
+    for record in records:
+        # since we fit k-means onto scaled data, we must scale our data again
+        X_scaled = scaler.transform(record["X"])
+        O = kmeans.predict(X_scaled) # observations
+
+        out_path = processed_test_dir / f"{record["id"]}.npz"
         np.savez(
             out_path,
             O = O,

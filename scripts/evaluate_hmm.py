@@ -1,12 +1,15 @@
 from train_hmm import load_models, train_and_save_models
 from src.HMM.classify import classify
 from src.load_seqs_by_label import load_seqs_by_label
+from src.gesture import Gesture
 from pathlib import Path
 from config import (
     PROCESSED_TEST_DIR,
     PROCESSED_VAL_DIR,
     PROCESSED_TRAIN_DIR,
 )
+from collections import defaultdict
+import numpy as np
 
 def main():
     try:
@@ -44,38 +47,51 @@ def main():
         print(f"Validation set was not tested since {processed_val_dir} was empty.")
     else:
         seqs_by_label = load_seqs_by_label(processed_val_dir)
+        model_val_total = 0
+        model_val_correct = 0
         for label, seqs in seqs_by_label.items():
             for seq in seqs:
                 predicted_label, prob = classify(seq, models)
                 msg = f"True label: {label}, Predicted label: {predicted_label}, Probability: {prob}"
 
-                model_num_total += 1
+                model_val_total += 1
                 if predicted_label == label:
                     print(msg + " CORRECT!")
-                    model_num_correct += 1
+                    model_val_correct += 1
                 else:
                     print(msg + " WRONG!")
 
-    print(f"VALIDATION 6-HMM accuracy: {model_num_correct / model_num_total}")
+    print(f"VALIDATION 6-HMM accuracy: {model_val_correct / model_val_total}")
 
     ### TEST SET
     if not any(PROCESSED_TEST_DIR.iterdir()):
         print(f"Test set was not tested since {PROCESSED_TEST_DIR} was empty.")
     else:
-        seqs_by_label = load_seqs_by_label(PROCESSED_TEST_DIR)
+        seqs_by_label = defaultdict(list)
+
+        for p in sorted(PROCESSED_TEST_DIR.glob("*.npz")):
+            sample = np.load(p, allow_pickle=False)
+            O = sample["O"] # my sequence of observations
+            y = p.stem # get gesture type label, which is retrieved from the .npz file as an np.ndarray
+            if O.size == 0:
+                continue # in case I have an empty .npz file for some reason
+            seqs_by_label[y].append(O)
+
+        model_test_total = 0
+        model_test_correct = 0
         for label, seqs in seqs_by_label.items():
             for seq in seqs:
                 predicted_label, prob = classify(seq, models)
-                msg = f"True label: {label}, Predicted label: {predicted_label}, Probability: {prob}"
+                msg = f"True label: {label}, Predicted label: {Gesture(predicted_label).name}, Probability: {prob}"
 
-                model_num_total += 1
+                model_test_total += 1
                 if predicted_label == label:
                     print(msg + " CORRECT!")
-                    model_num_correct += 1
+                    model_test_correct += 1
                 else:
-                    print(msg + " WRONG!")
+                    print(msg)
 
-    print(f"TEST 6-HMM accuracy: {model_num_correct / model_num_total}")
+    print(f"TEST 6-HMM accuracy: {model_test_correct / model_test_total}")
 
 if __name__ == "__main__":
     main()
