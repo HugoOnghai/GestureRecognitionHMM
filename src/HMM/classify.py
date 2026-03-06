@@ -11,13 +11,13 @@ def classify(seq, models):
     if isinstance(models, dict):
         models = list(models.values())
 
-    best_model_name = None
-    best_prob = -np.inf
+    scores = []
 
     for model in models:
-        loglikelihood, termination_prob = model.score(seq)
-        if termination_prob > best_prob:
-            best_prob = termination_prob
-            best_model_name = model.label
+        ll = model.score(seq)
+        scores.append((model.label, ll))
+        
+    # sort by log-likelihood descending
+    scores.sort(key=lambda x: x[1], reverse=True)
     
-    return best_model_name, best_prob
+    return scores[0][0], scores[0][1], scores

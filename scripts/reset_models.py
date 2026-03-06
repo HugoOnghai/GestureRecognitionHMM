@@ -1,4 +1,5 @@
 # run this script if you want to reset all of the stored models and partitioned training and validation datasets
+import sys
 import shutil
 from config import (
     RAW_TRAIN_DIR,
@@ -18,6 +19,7 @@ def main():
     user_input = input("Are you sure you want to reset all models and partitioned datasets? (y/n)")
     if user_input != "y":
         print("Aborting.")
+        sys.exit(1) # exit code so that the other terminal calls dont run in my bash script
         return
     
     # delete models

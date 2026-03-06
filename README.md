@@ -20,8 +20,9 @@ You can call `ls -T1` to recreate this diagram. The project is broken down into 
 -  pyproject.toml # Used by UV to manage the project.
 - 󰂺 README.md # You are here!
 -  uv.lock # Used by UV to synchronize dependencies.
+-  pipeline.sh # run this to run all the necessary scripts to reset, preprocess, train, and then evaluate the HMMs in one fell swoop, with easy changes to hyperparameters.
 
-# Setup Guide:
+# Setup Guide (TO RUN MY SAVED MODELS ON THE TEST SET):
 
 Like last time, I used UV again. After cloning the repository, run the following command at the project root:
 
@@ -29,8 +30,10 @@ Like last time, I used UV again. After cloning the repository, run the following
 uv run ./scripts/evaluate_hmm.py
 ```
 
-This command should run `evaluate_hmm.py` in the UV virtual environment that will be built from `uv.lock`. It should load each of the HMMs, and then predict the labels of each sequence in the directory given, currently the processed training set.
+This command should run `evaluate_hmm.py` in the UV virtual environment that will be built from `uv.lock`. It should load each of the HMMs, and then predict the labels of each sequence in the directory given, currently the processed training set. 
+
+N.B., `evaluate_hmm.py` outputs a log providing the ranked predictions of all HMMs. The "predicted" label is the HMM which assigned the given test sequence the largest log-likelihood. If you wish to only see the top 3 predictions, then run `evaluate_hmm.py` as shown above.
 
 # Debug/Testing:
 
-Improved from last time, I implemented a validation set. This can be easily generated with `partition_preprocess.py`. Then, to train the models on the training set and evaluate them on the validation set, run `train_hmm.py` and `evaluate_hmm.py` respectively. If you want to reset everything and try a new partition, run `reset_models.py`. This script resets everything by deleting the contents of `/models/`, deleting all pre-processing (`/data/processed_train` and `/data/processed_val`), and deleting all logs (`/outputs/training_logs`).
+Improved from last time, I implemented a validation set. This can be easily generated with `partition_preprocess.py` (after setting the `TRAIN_VAL_SPLIT` in `pipeline.sh`) Then, to train the models on the training set and evaluate them on the validation set, run `train_hmm.py` and `evaluate_hmm.py` respectively. If you want to reset everything and try a new partition, run `reset_models.py`. This script resets everything by deleting the contents of `/models/`, deleting all pre-processing (`/data/processed_train` and `/data/processed_val`), and deleting all logs (`/outputs/training_logs`).

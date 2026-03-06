@@ -1,4 +1,8 @@
 import numpy as np
+from scripts.config import (
+    EPSILON_LARGE,
+    EPSILON_SMALL
+)
 
 class HMM():
     """
@@ -167,12 +171,18 @@ class HMM():
 
         # normalize (also M-step)
         self.pi = pi / len(seqs)
-        self.A = A_numer / A_denom[:, None] # fixes broadcasting issues
-        self.B = B_numer / B_denom[:, None] + np.random.uniform(-1e-9, 1e-9) # fixes broadcasting issues and avoid 0 probability emissions and issues of all equal probabilities.
+        self.pi = np.maximum(self.pi, EPSILON_SMALL)
+        self.pi /= self.pi.sum(keepdims=True)
 
-        termination_prob = (1/c[-1])
+        self.A = A_numer / (A_denom[:, None] + EPSILON_SMALL) # fixes broadcasting issues
+        self.A = np.maximum(self.A, EPSILON_SMALL) # maintain all non-zero hidden transition probabilities
+        self.A /= self.A.sum(axis=1, keepdims=True) # maintain row-stochasticity
 
-        return total_loglikelihood, termination_prob
+        self.B = B_numer / (B_denom[:, None] + EPSILON_SMALL) # avoid divide by zero
+        self.B = np.maximum(self.B, EPSILON_SMALL) # maintain all non-zero emission probabilities
+        self.B /= self.B.sum(axis=1, keepdims=True) # maintain row-stochasticity
+
+        return total_loglikelihood
     
     def score(self, seqs, eps=1e-9):
         total = 0.0
@@ -181,8 +191,8 @@ class HMM():
         for seq in seqs:
             _, c = self.construct_forward(seq)
             total += -np.sum(np.log(np.clip(c, eps, None)))
-            termination_prob = (1/c[-1])
-        return total, termination_prob
+
+        return total
 
     def save(self, path):
         # Save the HMM parameters to a .npz file
